@@ -49,11 +49,30 @@ public class Player {
         return rect.x;
     }
 
+    public void setDirections(boolean u, boolean d, boolean l, boolean r){
+        up = u;
+        down = d;
+        left = l;
+        right = r;
+    }
+
     public void draw(Graphics g){
         g.drawImage(getImage(), (int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight(), null);
     }
 
     public Image getImage(){
-        return ImageLoader.loadCompatibleImage("thwomp.png");
+        //return ImageLoader.loadCompatibleImage("thwomp.png");
+        if(up == true && down == false){
+            return ImageLoader.loadCompatibleImage("LinkFacingUp.png");
+        }
+        else if(left == true && right == false){
+            return ImageLoader.loadCompatibleImage("LinkFacingLeft.png");
+        }
+        else if(right == true && left == false){
+            return ImageLoader.loadCompatibleImage("LinkFacingRight.png");
+        }
+        else{
+            return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
+        }
     }
 }

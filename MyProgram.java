@@ -68,16 +68,19 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_UP) {
             up = true;
-
+            player.setDirections(true, down, left, right);
         }
         else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
             down = true;
+            player.setDirections(up, true, left, right);
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             left = true;
+            player.setDirections(up, down, true, right);
         }
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             right = true;
+            player.setDirections(up, down, left, true);
         }
     }
    
@@ -86,15 +89,19 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_UP) {
             up = false;
+            player.setDirections(false, down, left, right);
         }
         else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
             down = false;
+            player.setDirections(up, false, left, right);
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             left = false;
+            player.setDirections(up, down, false, right);
         }
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             right = false;
+            player.setDirections(up, down, left, false);
         }
     }
    
@@ -147,32 +154,28 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
             player.setX((int)(player.getRectangle().getX()-3));
         }
         if(right) {
-            player.setX((int)(player.getRectangle().getY()-3));
+            player.setX((int)(player.getRectangle().getX()+3));
         }
        
         if(player.getX() < 0) {
-            player.x = 0;
+            player.setX(0);
         }
-        else if(player.x + player.getRectangle().getWidth() > gameWidth) {
-            player.x = gameWidth - player.getRectangle().getWidth();
-        }
-       
-        if(player.y < 0) {
-            player.y = 0;
-        }
-        else if(player.y + player.height > gameHeight) {
-            player.y = gameHeight - player.height;
+        else if(player.getX() + player.getRectangle().getWidth() > gameWidth) {
+            player.setX((int)(gameWidth - player.getRectangle().getWidth()));
         }
        
-        if(player.intersects(goal)) {
-            onWin();
+        if(player.getY() < 0) {
+            player.setY(0);
+        }
+        else if(player.getY() + player.getRectangle().getHeight() > gameHeight) {
+            player.setY((int)(gameHeight - player.getRectangle().getHeight()));
         }
        
         for(int i = 0; i < enemies.size(); i++) {
             if(enemies.get(i) == null)
                 continue;
        
-            if(enemies.get(i).intersects(player)) {
+            if(enemies.get(i).intersects(player.getRectangle())) {
                 onLose();
             }
            
@@ -191,8 +194,8 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         g.fillRect(0, 0, gameWidth, gameHeight);
    
         g.setColor(Color.BLUE);
-        g.drawImage(getPlayerImage(), player.x, player.y, player.width, player.height, null);
-        g.fillRect(player.x, player.y, player.width, player.height);
+        g.drawImage(player.getImage(), player.getX(), player.getY(), (int)player.getRectangle().getWidth(), (int)player.getRectangle().getHeight(), null);
+        //g.fillRect(player.getX(), player.getY(), (int)player.getRectangle().getWidth(), (int)player.getRectangle().getHeight());
        
         g.setColor(Color.GREEN);
         g.fillRect(goal.x, goal.y, goal.width, goal.height);
@@ -250,7 +253,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     }
     
     public static Rectangle getPlayer(){
-        return player;
+        return player.getRectangle();
     }
 
     public Image getPlayerImage(){
