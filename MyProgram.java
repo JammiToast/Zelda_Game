@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class MyProgram extends JPanel implements ActionListener, KeyListener {
 
-    private static Rectangle player = new Rectangle(); //a rectangle that represents the player
+    private static Player player = new Player(50, 50, 20, 20); //a rectangle that represents the player
     private Rectangle goal = new Rectangle(); //a rectangle that represents the goal
     private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //the array of Enemy objects
    
@@ -68,6 +68,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_UP) {
             up = true;
+
         }
         else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
             down = true;
@@ -116,35 +117,8 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
        
         up = down = left = right = false;
    
-        player = new Rectangle(50, 50, 20, 20);
-        goal = new Rectangle(400, 300, 20, 20);
-       
-        //enemies.add(new SpinningEnemy(250, 200, 20, 20, 100));
-        //enemies.add(new VerticalEnemy(200, 300, 20, 20, gameHeight, 5));
-        //enemies.add(new DiagonalEnemy(300, 300, 20, 20, gameHeight, 5, gameWidth, 6));
-        //enemies.add(new StalkerEnemy(100, 200, 10, 10, player));
-        //enemies.add(new HiveEnemy(150, 150, 30, 30, 100));
-        if(currentLevel == 1){
-            enemies.add(new VerticalEnemy(gameWidth / 2, gameHeight / 2, 20, 20, gameHeight, 5));
-        }
-        else if(currentLevel == 2){
-            createDialog("Level 2", 2000);
-            enemies.add(new SpinningEnemy(gameWidth / 2, gameHeight / 2, 20, 20, 50));
-            enemies.add(new DiagonalEnemy(gameWidth / 2, gameHeight / 2, 20, 20, gameHeight, 5, gameWidth, 10));
-        }
-        else if(currentLevel == 3){
-            createDialog("Level 3",2000);
-            enemies.add(new HiveEnemy(gameWidth / 2, gameHeight / 2, 30, 30, 75));
-            enemies.add(new HiveEnemy(40, gameHeight / 2, 30, 30, 75));
-        }
-        else if(currentLevel == 4){
-            createDialog("Level 4", 2000);
-            enemies.add(new VerticalEnemy(gameWidth / 2, gameHeight / 2, 20, 20, gameHeight, 5));
-            enemies.add(new SpinningEnemy(gameWidth / 2, gameHeight / 2, 20, 20, 50));
-            enemies.add(new DiagonalEnemy(gameWidth / 2, gameHeight / 2, 20, 20, gameHeight, 5, gameWidth, 10));
-            enemies.add(new HiveEnemy(gameWidth / 2, gameHeight / 2, 30, 30, 75));
-            enemies.add(new HiveEnemy(40, gameHeight / 2, 30, 30, 75));
-        }
+        //player = new Rectangle(50, 50, 20, 20);
+        //goal = new Rectangle(400, 300, 20, 20);
     }
    
     private void enterFullScreen() {
@@ -164,23 +138,23 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     //5 - it tells each of the Enemy objects to update()
     public void update() {
         if(up) {
-            player.y-=3;
+            player.setY((int)(player.getRectangle().getY()-3));
         }
         if(down) {
-            player.y+=3;
+            player.setY((int)(player.getRectangle().getY()+3));
         }
         if(left) {
-            player.x-=3;
+            player.setX((int)(player.getRectangle().getX()-3));
         }
         if(right) {
-            player.x+=3;
+            player.setX((int)(player.getRectangle().getY()-3));
         }
        
-        if(player.x < 0) {
+        if(player.getX() < 0) {
             player.x = 0;
         }
-        else if(player.x + player.width > gameWidth) {
-            player.x = gameWidth - player.width;
+        else if(player.x + player.getRectangle().getWidth() > gameWidth) {
+            player.x = gameWidth - player.getRectangle().getWidth();
         }
        
         if(player.y < 0) {
@@ -217,6 +191,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         g.fillRect(0, 0, gameWidth, gameHeight);
    
         g.setColor(Color.BLUE);
+        g.drawImage(getPlayerImage(), player.x, player.y, player.width, player.height, null);
         g.fillRect(player.x, player.y, player.width, player.height);
        
         g.setColor(Color.GREEN);
@@ -276,5 +251,23 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     
     public static Rectangle getPlayer(){
         return player;
+    }
+
+    public Image getPlayerImage(){
+        if(up){
+            return ImageLoader.loadCompatibleImage("LinkFacingUp.png");
+        }
+        else if(down){
+            return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
+        }
+        else if(left){
+            return ImageLoader.loadCompatibleImage("LinkFacingLeft.png");
+        }
+        else if(right){
+            return ImageLoader.loadCompatibleImage("LinkFacingRight.png");
+        }
+        else{
+            return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
+        }
     }
 }
