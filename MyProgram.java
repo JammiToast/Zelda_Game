@@ -5,15 +5,15 @@ import java.util.ArrayList;
 
 public class MyProgram extends JPanel implements ActionListener, KeyListener {
 
-    private static Player player = new Player(50, 50, 20, 20); //a rectangle that represents the player
+    private static Player player = new Player(50, 50, 30, 30); //a rectangle that represents the player
     private Rectangle goal = new Rectangle(); //a rectangle that represents the goal
     private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //the array of Enemy objects
    
     private boolean up, down, left, right; //booleans that track which keys are currently pressed
     private Timer timer; //the update timer
    
-    private int gameWidth = 475; //the width of the game area
-    private int gameHeight = 330; //the height of the game area
+    private int gameWidth = 480; //the width of the game area
+    private int gameHeight = 480; //the height of the game area
 
     private static JLabel dialogLabel;
     private static JFrame frame;
@@ -21,6 +21,9 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     
     private int currentLevel = 1;
     private int numLevels = 4;
+
+    private boolean attacking;
+    private int attackCounter;
    
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
@@ -66,21 +69,28 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     //Called every time a key is pressed
     //Stores the down state for use in the update method
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_UP) {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            attacking = true;
+        }
+        else if(e.getKeyCode() == KeyEvent.VK_UP) {
             up = true;
             player.setDirections(true, down, left, right);
+            player.setDir(1);
         }
         else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
             down = true;
             player.setDirections(up, true, left, right);
+            player.setDir(2);
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             left = true;
             player.setDirections(up, down, true, right);
+            player.setDir(3);
         }
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             right = true;
             player.setDirections(up, down, left, true);
+            player.setDir(4);
         }
     }
    
@@ -122,7 +132,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         timer = new Timer(1000 / 30, this); //roughly 30 frames per second
         timer.start();
        
-        up = down = left = right = false;
+        up = down = left = right = attacking = false;
    
         //player = new Rectangle(50, 50, 20, 20);
         //goal = new Rectangle(400, 300, 20, 20);
@@ -144,7 +154,16 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     //4 - it checks if any of the Enemy objects are touching the player, and if so notifies the player of their defeat and restarts the game
     //5 - it tells each of the Enemy objects to update()
     public void update() {
-        if(up) {
+        if(attacking){
+            player.attack();
+            attackCounter++;
+            if(attackCounter == 5){
+                attackCounter = 0;
+                attacking = false;
+                player.deattack();
+            }
+        }
+        else if(up) {
             player.setY((int)(player.getRectangle().getY()-3));
         }
         if(down) {
@@ -156,6 +175,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         if(right) {
             player.setX((int)(player.getRectangle().getX()+3));
         }
+
        
         if(player.getX() < 0) {
             player.setX(0);

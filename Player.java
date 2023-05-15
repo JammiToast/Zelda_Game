@@ -10,6 +10,8 @@ public class Player {
     private boolean down;
     private boolean left;
     private boolean right;
+    private int currentDirection; // 1 = up, 2 = down, 3 = left, 4 = right
+    private boolean attacking;
 
     public Player(int x, int y, int w, int h) {
         rect = new Rectangle(x, y, w, h);
@@ -19,6 +21,7 @@ public class Player {
         down = false;
         left = false;
         right = false;
+        currentDirection = 2;
     }
 
     public int getXSpeed() {
@@ -56,12 +59,24 @@ public class Player {
         right = r;
     }
 
+    public void setDir(int d){
+        currentDirection = d;
+    }
+
     public void draw(Graphics g){
         g.drawImage(getImage(), (int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight(), null);
     }
 
+    public void attack(){
+        attacking = true;
+    }
+
+    public void deattack(){
+        attacking = false;
+    }
+
     public Image getImage(){
-        //return ImageLoader.loadCompatibleImage("thwomp.png");
+    if(attacking == false){
         if(up == true && down == false){
             return ImageLoader.loadCompatibleImage("LinkFacingUp.png");
         }
@@ -71,8 +86,39 @@ public class Player {
         else if(right == true && left == false){
             return ImageLoader.loadCompatibleImage("LinkFacingRight.png");
         }
-        else{
+        else if(down == true && up == false){
             return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
         }
+        else{
+            if(currentDirection == 1){
+                return ImageLoader.loadCompatibleImage("LinkFacingUp.png");
+            }
+            else if(currentDirection == 2){
+                return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
+            }
+            else if(currentDirection == 3){
+                return ImageLoader.loadCompatibleImage("LinkFacingLeft.png");
+            }
+            else if(currentDirection == 4){
+                return ImageLoader.loadCompatibleImage("LinkFacingRight.png");
+            }
+        }
+        return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
     }
+    else{
+        if(currentDirection == 1){
+            return ImageLoader.loadCompatibleImage("LinkAttackingUp.png");
+        }
+        else if(currentDirection == 2){
+            return ImageLoader.loadCompatibleImage("LinkAttackingDown.png");
+        }
+        else if(currentDirection == 3){
+            return ImageLoader.loadCompatibleImage("LinkAttackingLeft.png");
+        }
+        else if(currentDirection == 4){
+            return ImageLoader.loadCompatibleImage("LinkAttackingRight.png");
+        }
+    }
+    return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
+}
 }
