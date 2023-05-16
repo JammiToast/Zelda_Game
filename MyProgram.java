@@ -8,6 +8,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     private static Player player = new Player(50, 50, 30, 30); //a rectangle that represents the player
     private Rectangle goal = new Rectangle(); //a rectangle that represents the goal
     private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //the array of Enemy objects
+    private ArrayList<Sword> swords = new ArrayList<Sword>();
    
     private boolean up, down, left, right; //booleans that track which keys are currently pressed
     private Timer timer; //the update timer
@@ -71,6 +72,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             attacking = true;
+            swords.add(new Sword(player.getX(), player.getY(), 30, 30, player.getDir(), 12));
         }
         else if(e.getKeyCode() == KeyEvent.VK_UP) {
             up = true;
@@ -201,6 +203,13 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
            
             enemies.get(i).move();
         }
+
+        for(int i = 0; i < swords.size(); i++) {
+            if(swords.get(i) == null){
+                continue;
+            }
+            swords.get(i).move();
+        }
        
     }
    
@@ -210,7 +219,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     //3 - it draws the goal in green
     //4 - it draws all the Enemy objects
     public void paint(Graphics g) {
-        g.setColor(Color.WHITE);
+        g.setColor(Color.GREEN);
         g.fillRect(0, 0, gameWidth, gameHeight);
    
         g.setColor(Color.BLUE);
@@ -224,6 +233,13 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
             if(e == null)
                 continue;
             e.draw(g);
+        }
+
+        for(Sword s: swords){
+            if(s == null){
+                continue;
+            }
+            g.drawImage(s.getImage(), s.getX(), s.getY(), (int)s.getRectangle().getWidth(), (int)s.getRectangle().getHeight(), null);
         }
     }
    

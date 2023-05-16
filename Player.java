@@ -63,6 +63,10 @@ public class Player {
         currentDirection = d;
     }
 
+    public int getDir(){
+        return currentDirection;
+    }
+
     public void draw(Graphics g){
         g.drawImage(getImage(), (int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight(), null);
     }
