@@ -8,7 +8,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     private static Player player = new Player(50, 50, 30, 30); //a rectangle that represents the player
     private Rectangle goal = new Rectangle(); //a rectangle that represents the goal
     private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //the array of Enemy objects
-    private ArrayList<Sword> swords = new ArrayList<Sword>();
+    private static ArrayList<Sword> swords = new ArrayList<Sword>();
    
     private boolean up, down, left, right; //booleans that track which keys are currently pressed
     private Timer timer; //the update timer
@@ -138,6 +138,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
    
         //player = new Rectangle(50, 50, 20, 20);
         //goal = new Rectangle(400, 300, 20, 20);
+        enemies.add(new VerticalEnemy(240,240,30,30,480,5));
     }
    
     private void enterFullScreen() {
@@ -209,6 +210,14 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
                 continue;
             }
             swords.get(i).move();
+            for(int k = 0; k < enemies.size(); k++){
+                if(enemies.get(k) == null){
+                    continue;
+                }
+                if(enemies.get(k).intersects(swords.get(i).getRectangle())){
+                    enemies.get(k).setDormant();
+                }
+            }
         }
        
     }
@@ -219,7 +228,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     //3 - it draws the goal in green
     //4 - it draws all the Enemy objects
     public void paint(Graphics g) {
-        g.setColor(Color.GREEN);
+        g.setColor(new Color(230,230,230));
         g.fillRect(0, 0, gameWidth, gameHeight);
    
         g.setColor(Color.BLUE);
