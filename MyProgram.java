@@ -138,7 +138,9 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
    
         //player = new Rectangle(50, 50, 20, 20);
         //goal = new Rectangle(400, 300, 20, 20);
-        enemies.add(new VerticalEnemy(240,240,30,30,480,5));
+        //enemies.add(new VerticalEnemy(240,240,30,30,480,5));
+        enemies.add(new Moblin(240, 240, 30,30,2,5,480,480));
+        enemies.add(new Moblin(240, 240, 30,30,3,5,480,480));
     }
    
     private void enterFullScreen() {
@@ -215,7 +217,8 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
                     continue;
                 }
                 if(enemies.get(k).intersects(swords.get(i).getRectangle())){
-                    enemies.get(k).setDormant();
+                    enemies.remove(k);
+                    swords.remove(i);
                 }
             }
         }

@@ -33,10 +33,6 @@ public class VerticalEnemy extends Enemy
         return ImageLoader.loadCompatibleImage("thwomp.png");
     }
 
-    public void setDormant(){
-        super.setDormant();
-        ySpeed = 0;
-    }
     
     public void move(){
         Rectangle rect = getRectangle();

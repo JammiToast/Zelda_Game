@@ -71,7 +71,7 @@ public class Player {
         g.drawImage(getImage(), (int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight(), null);
     }
 
-    public void attack(){
+    public void attack(){   
         attacking = true;
     }
 
