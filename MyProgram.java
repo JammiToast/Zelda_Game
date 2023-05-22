@@ -37,7 +37,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         dialog.setBounds(125, 125, 100, 70);
         dialog.setVisible(false);
        
-        frame.setTitle("Obstacle Game");
+        frame.setTitle("Zelda Game");
         frame.setLayout(new BorderLayout());
        
         MyProgram game = new MyProgram();
