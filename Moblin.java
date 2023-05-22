@@ -74,10 +74,10 @@ public class Moblin extends Enemy{
         if(direction == 1){
             return ImageLoader.loadCompatibleImage("MoblinDown.png");
         }
-        if(direction == 3){
+        if(direction == 4){
             return ImageLoader.loadCompatibleImage("MoblinLeft.png");
         }
-        if(direction == 4){
+        if(direction == 3){
             return ImageLoader.loadCompatibleImage("MoblinRight.png");
         }
         return ImageLoader.loadCompatibleImage("MoblinDown.png");
