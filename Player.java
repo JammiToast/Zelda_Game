@@ -13,6 +13,7 @@ public class Player {
     private int currentDirection; // 1 = up, 2 = down, 3 = left, 4 = right
     private boolean attacking;
     private int lives;
+    private boolean vulnerable;
 
     public Player(int x, int y, int w, int h) {
         rect = new Rectangle(x, y, w, h);
@@ -24,6 +25,7 @@ public class Player {
         right = false;
         currentDirection = 2;
         lives = 3;
+        vulnerable = true;
     }
 
     public int getXSpeed() {
@@ -64,6 +66,14 @@ public class Player {
 
     public int getLives(){
         return lives;
+    }
+
+    public boolean getVulnerable(){
+        return vulnerable;
+    }
+
+    public void setVulnerable(boolean x){
+        vulnerable = x;
     }
 
     public void setDirections(boolean u, boolean d, boolean l, boolean r){
@@ -124,22 +134,113 @@ public class Player {
                 }
                 return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
             }
+            if(lives == 2){
+                if(up == true && down == false){
+                    return ImageLoader.loadCompatibleImage("BlinkFacingUp.png");
+                }
+                else if(left == true && right == false){
+                    return ImageLoader.loadCompatibleImage("BlinkFacingLeft.png");
+                }
+                else if(right == true && left == false){
+                    return ImageLoader.loadCompatibleImage("BlinkFacingRight.png");
+                }
+                else if(down == true && up == false){
+                    return ImageLoader.loadCompatibleImage("BlinkFacingDown.png");
+                }
+                else{
+                    if(currentDirection == 1){
+                        return ImageLoader.loadCompatibleImage("BlinkFacingUp.png");
+                    }
+                    else if(currentDirection == 2){
+                        return ImageLoader.loadCompatibleImage("BlinkFacingDown.png");
+                    }
+                    else if(currentDirection == 3){
+                        return ImageLoader.loadCompatibleImage("BlinkFacingLeft.png");
+                    }
+                    else if(currentDirection == 4){
+                        return ImageLoader.loadCompatibleImage("BlinkFacingRight.png");
+                    }
+                }
+                return ImageLoader.loadCompatibleImage("BlinkFacingDown.png");
+            }
+            if(lives == 1){
+                if(up == true && down == false){
+                    return ImageLoader.loadCompatibleImage("RinkFacingUp.png");
+                }
+                else if(left == true && right == false){
+                    return ImageLoader.loadCompatibleImage("RinkFacingLeft.png");
+                }
+                else if(right == true && left == false){
+                    return ImageLoader.loadCompatibleImage("RinkFacingRight.png");
+                }
+                else if(down == true && up == false){
+                    return ImageLoader.loadCompatibleImage("RinkFacingDown.png");
+                }
+                else{
+                    if(currentDirection == 1){
+                        return ImageLoader.loadCompatibleImage("RinkFacingUp.png");
+                    }
+                    else if(currentDirection == 2){
+                        return ImageLoader.loadCompatibleImage("RinkFacingDown.png");
+                    }
+                    else if(currentDirection == 3){
+                        return ImageLoader.loadCompatibleImage("RinkFacingLeft.png");
+                    }
+                    else if(currentDirection == 4){
+                        return ImageLoader.loadCompatibleImage("RinkFacingRight.png");
+                    }
+                }
+                return ImageLoader.loadCompatibleImage("RinkFacingDown.png");
+            }
         }
         else{
-            if(currentDirection == 1){
-                return ImageLoader.loadCompatibleImage("LinkAttackingUp.png");
-            }
-            else if(currentDirection == 2){
-                return ImageLoader.loadCompatibleImage("LinkAttackingDown.png");
-            }
-                else if(currentDirection == 3){
-                    return ImageLoader.loadCompatibleImage("LinkAttackingLeft.png");
+            if(lives == 3){
+                if(currentDirection == 1){
+                    return ImageLoader.loadCompatibleImage("LinkAttackingUp.png");
                 }
-                else if(currentDirection == 4){
-                    return ImageLoader.loadCompatibleImage("LinkAttackingRight.png");
+                else if(currentDirection == 2){
+                    return ImageLoader.loadCompatibleImage("LinkAttackingDown.png");
                 }
+                    else if(currentDirection == 3){
+                        return ImageLoader.loadCompatibleImage("LinkAttackingLeft.png");
+                    }
+                    else if(currentDirection == 4){
+                        return ImageLoader.loadCompatibleImage("LinkAttackingRight.png");
+                    }
+                return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
             }
-            return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
+            if(lives == 2){
+                if(currentDirection == 1){
+                    return ImageLoader.loadCompatibleImage("BlinkAttackingUp.png");
+                }
+                else if(currentDirection == 2){
+                    return ImageLoader.loadCompatibleImage("BlinkAttackingDown.png");
+                }
+                    else if(currentDirection == 3){
+                        return ImageLoader.loadCompatibleImage("BlinkAttackingLeft.png");
+                    }
+                    else if(currentDirection == 4){
+                        return ImageLoader.loadCompatibleImage("BlinkAttackingRight.png");
+                    }
+                return ImageLoader.loadCompatibleImage("BlinkFacingDown.png");
+            }
+            if(lives == 1){
+                if(currentDirection == 1){
+                    return ImageLoader.loadCompatibleImage("RinkAttackingUp.png");
+                }
+                else if(currentDirection == 2){
+                    return ImageLoader.loadCompatibleImage("RinkAttackingDown.png");
+                }
+                    else if(currentDirection == 3){
+                        return ImageLoader.loadCompatibleImage("RinkAttackingLeft.png");
+                    }
+                    else if(currentDirection == 4){
+                        return ImageLoader.loadCompatibleImage("RinkAttackingRight.png");
+                    }
+                return ImageLoader.loadCompatibleImage("RinkFacingDown.png");
+            }
+        }
+        return ImageLoader.loadCompatibleImage("LinkFacingDown.png");
     }
 }
 
