@@ -25,6 +25,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
 
     private boolean attacking;
     private int attackCounter;
+    private int vulnerablecounter;
    
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
@@ -37,7 +38,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         dialog.setBounds(125, 125, 100, 70);
         dialog.setVisible(false);
        
-        frame.setTitle("Obstacle Game");
+        frame.setTitle("Zelda Game");
         frame.setLayout(new BorderLayout());
        
         MyProgram game = new MyProgram();
@@ -200,8 +201,20 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
             if(enemies.get(i) == null)
                 continue;
        
-            if(enemies.get(i).intersects(player.getRectangle())) {
-                onLose();
+            if(enemies.get(i).intersects(player.getRectangle()) && player.getVulnerable()) {
+                player.removeLife();
+                player.setVulnerable(false);
+                if(player.getLives() == 0){
+                    onLose();
+                }
+            }
+
+            if(player.getVulnerable() == false){
+                vulnerablecounter++;
+                if(vulnerablecounter == 30){
+                    vulnerablecounter = 0;
+                    player.setVulnerable(true);
+                }
             }
            
             enemies.get(i).move();
