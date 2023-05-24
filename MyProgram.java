@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class MyProgram extends JPanel implements ActionListener, KeyListener {
 
-    private static Player player = new Player(50, 50, 50, 50); //a rectangle that represents the player
+    private static Player player = new Player(50, 50, 30, 30); //a rectangle that represents the player
     private Rectangle goal = new Rectangle(); //a rectangle that represents the goal
     private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //the array of Enemy objects
     private static ArrayList<Sword> swords = new ArrayList<Sword>();
