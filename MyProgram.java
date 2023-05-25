@@ -26,6 +26,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     private boolean attacking;
     private int attackCounter;
     private int vulnerablecounter;
+    private int OctorokCounter;
    
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
@@ -53,7 +54,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         frame.pack();
        
         game.setUpGame();
-        // game.enterFullScreen();
+        //game.enterFullScreen();
     }
    
     //Constructor for the game panel
@@ -127,7 +128,8 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     public void setUpGame() {
            
         enemies.clear();
-        
+        swords.clear();
+
         if(timer != null) {
             timer.stop();
         }
@@ -136,12 +138,31 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         timer.start();
        
         up = down = left = right = attacking = false;
+
+        player = new Player(220, 440, 30, 30); //a rectangle that represents the player
+        goal = new Rectangle(200, 0 , 80, 20);
    
-        //player = new Rectangle(50, 50, 20, 20);
-        //goal = new Rectangle(400, 300, 20, 20);
-        //enemies.add(new VerticalEnemy(240,240,30,30,480,5));
-        enemies.add(new Moblin(240, 240, 30,30,2,5,480,480));
-        enemies.add(new Moblin(240, 240, 30,30,3,5,480,480));
+        if(currentLevel == 1){
+            createDialog("Level 1: Space to Attack!", 1000);
+            enemies.add(new Moblin (0, 85, 30, 30, 4, 5, 480, 480));
+            enemies.add(new Moblin(220, 155, 30, 30, 3, 5, 480, 480));
+            enemies.add(new Moblin(0, 225, 30, 30, 4, 5, 480, 480));
+            enemies.add(new Moblin(220, 295, 30, 30, 3, 5, 480, 480));
+        }
+        else if(currentLevel == 2){
+            createDialog("Level 2: Octoroks!", 1000);
+            enemies.add(new Octorok(40, 85, 30, 30, 4));
+            enemies.add(new Octorok(40, 155, 30, 30, 4));
+            enemies.add(new Octorok(40, 225, 30, 30, 4));
+            enemies.add(new Octorok(40, 295, 30, 30, 4));
+        }
+        else if(currentLevel == 3){
+            createDialog("Level 3", 1000);
+            enemies.add(new Moblin(0, 85, 30, 30, 4, 5, 480, 480));
+            enemies.add(new Octorok(40, 0, 30, 30, 2));
+            enemies.add(new Octorok(400, 0, 30, 30, 2));
+            enemies.add(new Moblin(0, 225, 30, 30, 4, 5, 480, 480));
+        }
     }
    
     private void enterFullScreen() {
@@ -196,11 +217,12 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
         else if(player.getY() + player.getRectangle().getHeight() > gameHeight) {
             player.setY((int)(gameHeight - player.getRectangle().getHeight()));
         }
+        int size = enemies.size();
        
-        for(int i = 0; i < enemies.size(); i++) {
+        for(int i = 0; i < size; i++) {
             if(enemies.get(i) == null)
                 continue;
-       
+            
             if(enemies.get(i).intersects(player.getRectangle()) && player.getVulnerable()) {
                 player.removeLife();
                 player.setVulnerable(false);
@@ -216,8 +238,29 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
                     player.setVulnerable(true);
                 }
             }
+            
+            if(enemies.get(i).isOctorok() && OctorokCounter == 30){
+                if(((Octorok)enemies.get(i)).getDirection() == 1){
+                    enemies.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,1,5,480,480));
+                }
+                if(((Octorok)enemies.get(i)).getDirection() == 2){
+                    enemies.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,2,5,480,480));
+                }
+                if(((Octorok)enemies.get(i)).getDirection() == 3){
+                    enemies.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,3,5,480,480));
+                }
+                if(((Octorok)enemies.get(i)).getDirection() == 4){
+                    enemies.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,4,5,480,480));
+                }
+            }
+
+            OctorokCounter++;
+            if(OctorokCounter > 30){
+                OctorokCounter = 0;
+            }
            
             enemies.get(i).move();
+
         }
 
         for(int i = 0; i < swords.size(); i++) {
@@ -234,6 +277,12 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
                     swords.remove(i);
                 }
             }
+        }
+
+
+        if(player.getRectangle().intersects(goal)) {
+
+            onWin();
         }
        
     }

@@ -25,4 +25,8 @@ public abstract class Enemy
     public abstract Color getColor();
     
     public abstract void move();
+
+    public boolean isOctorok(){
+        return false;
+    }
 }
