@@ -9,6 +9,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
     private Rectangle goal = new Rectangle(); //a rectangle that represents the goal
     private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //the array of Enemy objects
     private static ArrayList<Sword> swords = new ArrayList<Sword>();
+    private static ArrayList<FlameBall> flameballs = new ArrayList<FlameBall>();
    
     private boolean up, down, left, right; //booleans that track which keys are currently pressed
     private Timer timer; //the update timer
@@ -129,6 +130,7 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
            
         enemies.clear();
         swords.clear();
+        flameballs.clear();
 
         if(timer != null) {
             timer.stop();
@@ -163,6 +165,11 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
             enemies.add(new Octorok(400, 0, 30, 30, 2));
             enemies.add(new Moblin(0, 225, 30, 30, 4, 5, 480, 480));
         }
+        else if(currentLevel == 4){
+            createDialog("BOSS BATTLE!", 1000);
+            enemies.add(new Moblin(200,200,80,80,4,5,480,480));
+        }
+
     }
    
     private void enterFullScreen() {
@@ -232,7 +239,6 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
             }
 
             if(player.getVulnerable() == false){
-                vulnerablecounter++;
                 if(vulnerablecounter == 30){
                     vulnerablecounter = 0;
                     player.setVulnerable(true);
@@ -241,16 +247,16 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
             
             if(enemies.get(i).isOctorok() && OctorokCounter == 30){
                 if(((Octorok)enemies.get(i)).getDirection() == 1){
-                    enemies.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,1,5,480,480));
+                    flameballs.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,1,5,480,480));
                 }
                 if(((Octorok)enemies.get(i)).getDirection() == 2){
-                    enemies.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,2,5,480,480));
+                    flameballs.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,2,5,480,480));
                 }
                 if(((Octorok)enemies.get(i)).getDirection() == 3){
-                    enemies.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,3,5,480,480));
+                    flameballs.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,3,5,480,480));
                 }
                 if(((Octorok)enemies.get(i)).getDirection() == 4){
-                    enemies.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,4,5,480,480));
+                    flameballs.add(new FlameBall((int)enemies.get(i).getRectangle().getX(),(int)enemies.get(i).getRectangle().getY(),10,10,4,5,480,480));
                 }
             }
 
@@ -277,6 +283,36 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
                     swords.remove(i);
                 }
             }
+            for(int z = 0; z < flameballs.size(); z++){
+                if(flameballs.get(z) == null){
+                    continue;
+                }
+                if(flameballs.get(z).intersects(swords.get(i).getRectangle())){
+                    flameballs.remove(z);
+                    swords.remove(i);
+                }
+            }
+        }
+
+        for(int i = 0; i < flameballs.size(); i++) {
+            if(flameballs.get(i) == null){
+                continue;
+            }
+            flameballs.get(i).move();
+            if(flameballs.get(i).intersects(player.getRectangle()) && player.getVulnerable()){
+                player.removeLife();
+                player.setVulnerable(false);
+                if(player.getLives() == 0){
+                    onLose();
+                }
+            }
+            if(player.getVulnerable() == false){
+                vulnerablecounter++;
+                if(vulnerablecounter == 30){
+                    vulnerablecounter = 0;
+                    player.setVulnerable(true);
+                }
+            }
         }
 
 
@@ -284,6 +320,8 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
 
             onWin();
         }
+
+        vulnerablecounter++;
        
     }
    
@@ -314,6 +352,13 @@ public class MyProgram extends JPanel implements ActionListener, KeyListener {
                 continue;
             }
             g.drawImage(s.getImage(), s.getX(), s.getY(), (int)s.getRectangle().getWidth(), (int)s.getRectangle().getHeight(), null);
+        }
+
+        for(FlameBall f: flameballs){
+            if(f == null){
+                continue;
+            }
+            g.drawImage(f.getImage(), (int)f.getRectangle().getX(), (int)f.getRectangle().getY(), (int)f.getRectangle().getWidth(), (int)f.getRectangle().getHeight(), null);
         }
     }
    
